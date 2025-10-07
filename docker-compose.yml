@@ -73,7 +73,7 @@ services:
       - ./backend/.env
     # Binds the VPS's IP:8000 to the container's internal port 8000 (Correct).
     ports:
-      - "192.229.87.153:8000:8000"
+      - "8000:8000"
     restart: unless-stopped
 
   frontend:
@@ -89,7 +89,7 @@ services:
     # Binds the VPS's IP:3080 (External access port) to the
     # container's internal port 3000 (where Nuxt is actually listening).
     ports:
-      - "192.229.87.153:4200:4200"
+      - "4200:4200"
     depends_on:
       - backend
     restart: unless-stopped
