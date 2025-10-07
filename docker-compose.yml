@@ -27,6 +27,40 @@
 #       - backend
 #     restart: unless-stopped
 
+# chnage from this 11:57
+# version: "3.9"
+
+# services:
+#   backend:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     container_name: fastapi-backend
+#     env_file:
+#       - ./backend/.env
+#     # **CORRECTION**: Removed "127.0.0.1". This binds the container's port 8000
+#     # to the VPS's public IP on port 8000.
+#     ports:
+#       - "192.229.87.153:8000:8000"
+#     restart: unless-stopped
+
+#   frontend:
+#     build:
+#       context: ./sportbet
+#       dockerfile: Dockerfile
+#       args:
+#         NUXT_PUBLIC_backend_api: "http://backend:8000/api"
+#     container_name: nuxt-frontend
+#     environment:
+#       - NUXT_PUBLIC_backend_api=http://backend:8000/api
+#     # **CORRECTION**: Removed "127.0.0.1". This binds the container's port 3080
+#     # to the VPS's public IP on port 3080.
+#     ports:
+#       - "192.229.87.153:3080:3080"
+#     depends_on:
+#       - backend
+#     restart: unless-stopped
+
 version: "3.9"
 
 services:
@@ -37,10 +71,9 @@ services:
     container_name: fastapi-backend
     env_file:
       - ./backend/.env
-    # **CORRECTION**: Removed "127.0.0.1". This binds the container's port 8000
-    # to the VPS's public IP on port 8000.
+    # Binds the VPS's IP:8000 to the container's internal port 8000 (Correct).
     ports:
-      - "8000:8000"
+      - "192.229.87.153:8000:8000"
     restart: unless-stopped
 
   frontend:
@@ -52,10 +85,11 @@ services:
     container_name: nuxt-frontend
     environment:
       - NUXT_PUBLIC_backend_api=http://backend:8000/api
-    # **CORRECTION**: Removed "127.0.0.1". This binds the container's port 3080
-    # to the VPS's public IP on port 3080.
+    # CRITICAL CORRECTION:
+    # Binds the VPS's IP:3080 (External access port) to the
+    # container's internal port 3000 (where Nuxt is actually listening).
     ports:
-      - "3080:3080"
+      - "192.229.87.153:4200:4200"
     depends_on:
       - backend
     restart: unless-stopped
